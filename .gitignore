@@ -4,3 +4,5 @@ dist/
 .env.local
 .npm-cache/
 *.tsbuildinfo
+.vercel
+.env*
