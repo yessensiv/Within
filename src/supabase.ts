@@ -1,3 +1,4 @@
+import { isInvalidAccount } from "./session-validation";
 import { createClient, type Session } from "@supabase/supabase-js";
 import type { Data, Goal, Note, Memory, Profile } from "./domain";
 import type { Repository } from "./repository";
@@ -13,6 +14,12 @@ export class SupabaseRepository implements Repository {
   constructor(private uid: string) {}
   async load(): Promise<Data> {
     const client = supabase!;
+    const { data: account, error: accountError } = await client.auth.getUser();
+    if (isInvalidAccount(accountError) || (!accountError && !account.user)) {
+      await client.auth.signOut({ scope: "local" });
+      throw new Error("Сессия завершена. Войди снова.");
+    }
+    if (accountError) throw accountError;
     const results = await Promise.all([
       client.from("profiles").select("*").eq("id", this.uid).single(),
       client
