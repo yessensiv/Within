@@ -718,7 +718,7 @@ function App() {
         <NavLink to="/goals" className="brand">
           <Constellation />
           <span>
-            Мой мир<small>Личное пространство</small>
+            Within<small>Личное пространство</small>
           </span>
         </NavLink>
         <div className="space-note">
@@ -769,7 +769,7 @@ function App() {
         <div>
           <NavLink to="/goals" className="brand">
             <Constellation />
-            Мой мир
+            Within
           </NavLink>
           {repository.demo && (
             <small className="mobile-demo">Демонстрационный режим</small>
@@ -2160,7 +2160,7 @@ function PublicPage() {
     <main className="public-page">
       <div className="brand">
         <Constellation />
-        Мой мир
+        Within
       </div>
       {error ? (
         <p>Не удалось открыть профиль. Попробуйте обновить страницу.</p>
@@ -2252,7 +2252,7 @@ function AuthPage() {
       <section className="auth-card">
         <div className="brand">
           <Constellation />
-          Мой мир
+          Within
         </div>
         {sent ? (
           <>
@@ -2425,7 +2425,7 @@ function ResetPassword({
       <section className="auth-card">
         <div className="brand">
           <Constellation />
-          Мой мир
+          Within
         </div>
         <h1>Новый пароль</h1>
         {!session || !recovery ? (
@@ -2441,7 +2441,7 @@ function ResetPassword({
           <>
             <p>Пароль изменён.</p>
             <NavLink className="primary" to="/goals">
-              Вернуться в Мой мир
+              Вернуться в Within
             </NavLink>
           </>
         ) : (
@@ -2541,7 +2541,7 @@ function Welcome({
       <section className="auth-card">
         <div className="brand">
           <Constellation />
-          Мой мир
+          Within
         </div>
         <h1>Привет, {session.user.user_metadata.display_name || "друг"}</h1>
         <p className="muted">
