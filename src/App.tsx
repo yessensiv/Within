@@ -7,9 +7,6 @@ import {
   NavLink,
   useLocation,
   useNavigate,
-  Routes,
-  Route,
-  useParams,
 } from "react-router-dom";
 import {
   Sparkles,
@@ -35,7 +32,6 @@ import {
   X,
   ImagePlus,
   Download,
-  Copy,
   ChevronDown,
   Leaf,
   Plane,
@@ -53,14 +49,12 @@ import {
   seed,
   stamp,
   today,
-  slug,
   filterGoals,
   sortGoals,
   sortNotes,
   type GoalSort,
   completion,
   plain,
-  publicData,
   type Goal,
   type Note,
   type Memory,
@@ -445,7 +439,7 @@ function App() {
     memory?: Goal;
   } | null>(null);
   const [memory, setMemory] = useState<Goal | null>(null);
-  const [preview, setPreview] = useState(false);
+
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("Все");
   const [category, setCategory] = useState("Все категории");
@@ -689,17 +683,7 @@ function App() {
                 ? "Открыть воспоминание"
                 : "Сохранить воспоминание"}
             </button>
-            <Toggle
-              label="Показывать в публичном профиле"
-              value={g.is_public}
-              onChange={() =>
-                void put("goals", {
-                  ...g,
-                  is_public: !g.is_public,
-                  updated_at: stamp(),
-                }).catch(() => notify("Не удалось сохранить"))
-              }
-            />
+
           </>
         )}
         {linked && (
@@ -1000,54 +984,7 @@ function App() {
                   <AccountSettings notify={notify} />
                 )}
               </section>
-              <section className="settings-card">
-                <h2>Публичный профиль</h2>
-                <p className="muted">
-                  Ты решаешь, чем поделиться. Блокнот всегда остаётся личным.
-                </p>
-                <Toggle
-                  label="Публичный профиль"
-                  value={data.profile.is_public}
-                  onChange={() => {
-                    if (data.profile.is_public)
-                      void put("profiles", {
-                        ...data.profile,
-                        is_public: false,
-                        updated_at: stamp(),
-                      }).catch(() => notify("Не удалось выключить профиль"));
-                    else setPreview(true);
-                  }}
-                />
-                {data.profile.is_public && (
-                  <div className="share-link">
-                    <input
-                      readOnly
-                      aria-label="Ссылка на профиль"
-                      value={`${locationOrigin()}/u/${data.profile.public_slug}`}
-                    />
-                    <button
-                      className="icon"
-                      aria-label="Скопировать"
-                      onClick={() =>
-                        void navigator.clipboard
-                          .writeText(
-                            `${locationOrigin()}/u/${data.profile.public_slug}`,
-                          )
-                          .then(() => notify("Ссылка скопирована"))
-                          .catch(() => notify("Скопируйте ссылку из поля"))
-                      }
-                    >
-                      <Copy size={18} />
-                    </button>
-                  </div>
-                )}
-                {repository.demo && (
-                  <p className="notice">
-                    В демо-режиме ссылка доступна только в этом браузере. Для
-                    публикации нужен Supabase.
-                  </p>
-                )}
-              </section>
+
               <section className="settings-card">
                 <h2>Мои данные</h2>
                 <button
@@ -1198,45 +1135,6 @@ function App() {
           close={() => setMemory(null)}
         />
       )}{" "}
-      {preview && (
-        <Modal title="Вот что увидят другие" close={() => setPreview(false)}>
-          <PublicContent
-            result={{
-              ...publicData({
-                ...data,
-                profile: { ...data.profile, is_public: true },
-              }),
-            }}
-          />
-          <p className="notice">
-            Будут видны только выбранные выполненные цели и отдельно разрешённые
-            воспоминания.
-          </p>
-          <div className="dialog-actions">
-            <button className="secondary" onClick={() => setPreview(false)}>
-              Отмена
-            </button>
-            <button
-              className="primary"
-              onClick={async () => {
-                try {
-                  await put("profiles", {
-                    ...data.profile,
-                    is_public: true,
-                    public_slug: slug(data.profile.public_slug),
-                    updated_at: stamp(),
-                  });
-                  setPreview(false);
-                } catch {
-                  notify("Не удалось включить профиль");
-                }
-              }}
-            >
-              Подтвердить
-            </button>
-          </div>
-        </Modal>
-      )}
       {toast && (
         <div className="toast" role="status">
           <div className="toast-message">
@@ -1997,7 +1895,7 @@ function MemoryEditor({
   close: () => void;
 }) {
   const [body, setBody] = useState(existing?.body || "");
-  const [isPublic, setPublic] = useState(existing?.is_public || false);
+  
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [editing, setEditing] = useState(!existing);
@@ -2029,7 +1927,7 @@ function MemoryEditor({
               user_id: goal.user_id,
               goal_id: goal.id,
               body,
-              is_public: isPublic,
+              is_public: false,
               created_at: existing?.created_at || now,
               updated_at: now,
             });
@@ -2051,15 +1949,7 @@ function MemoryEditor({
             placeholder="Как это было? Что ты почувствовала?"
           />
         </label>
-        <Toggle
-          value={isPublic}
-          label="Показать воспоминание"
-          onChange={() => setPublic((v) => !v)}
-        />
-        <p className="notice">
-          Появится в публичном профиле, только если профиль и эта цель
-          опубликованы.
-        </p>
+
         {error && (
           <p className="error" role="alert">
             {error}
@@ -2146,68 +2036,6 @@ function ProfileForm({
         Сохранить
       </button>
     </form>
-  );
-}
-function PublicContent({
-  result,
-}: {
-  result: Awaited<ReturnType<Repository["public"]>>;
-}) {
-  return (
-    <div className="public-content">
-      <span className="avatar">{result.name.slice(0, 1)}</span>
-      <h1>{result.name}</h1>
-      <p className="muted">То, что уже получилось</p>
-      {result.goals.map((g, i) => (
-        <article className="public-goal" key={i}>
-          <Category name={g.category} />
-          <h2>{g.title}</h2>
-          <p className="completed">
-            <Check size={15} />
-            {g.completed_on &&
-              new Date(g.completed_on + "T12:00:00").toLocaleDateString("ru", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-          </p>
-          {g.body && <Markdown body={g.body} />}
-        </article>
-      ))}
-      {!result.goals.length && (
-        <p className="muted">Пока нет опубликованных целей</p>
-      )}
-    </div>
-  );
-}
-function PublicPage() {
-  const { slug: publicSlug } = useParams();
-  const [result, setResult] = useState<Awaited<
-    ReturnType<Repository["public"]>
-  > | null>(null);
-  const [error, setError] = useState(false);
-  useEffect(() => {
-    repository
-      .public(publicSlug!)
-      .then(setResult)
-      .catch(() => setError(true));
-  }, [publicSlug]);
-  return (
-    <main className="public-page">
-      <div className="brand">
-        <Constellation />
-        Within
-      </div>
-      {error ? (
-        <p>Не удалось открыть профиль. Попробуйте обновить страницу.</p>
-      ) : !result ? (
-        <p>Загрузка…</p>
-      ) : result.name ? (
-        <PublicContent result={result} />
-      ) : (
-        <Empty icon={Leaf} text="Это пространство недоступно" />
-      )}
-    </main>
   );
 }
 function AccountSettings({ notify }: { notify: (s: string) => void }) {
@@ -2667,12 +2495,7 @@ export function Root() {
     )
       nav("/goals", { replace: true });
   }, [ready, session, location.pathname, nav]);
-  if (location.pathname.startsWith("/u/"))
-    return (
-      <Routes>
-        <Route path="/u/:slug" element={<PublicPage />} />
-      </Routes>
-    );
+  if (location.pathname.startsWith("/u/")) return <main className="public-page"><p>Страница недоступна</p><NavLink to="/goals">Открыть Within</NavLink></main>;
   if (!ready)
     return <div className="loading">Открываем твоё пространство…</div>;
   if (!supabase) return <App />;
@@ -2683,3 +2506,4 @@ export function Root() {
     return <Welcome session={session} finish={() => setWelcomed(true)} />;
   return <App key={session.user.id} />;
 }
+
