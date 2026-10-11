@@ -270,6 +270,7 @@ function ImageView({
   path: string | null;
   bucket?: "covers" | "avatars";
 }) {
+  const [loadedUrl, setLoadedUrl] = useState("");
   const [image, setImage] = useState(() => ({ path, bucket, url: cachedImageUrl(repository, bucket, path) }));
   const url = image.path === path && image.bucket === bucket ? image.url : cachedImageUrl(repository, bucket, path);
   useEffect(() => {
@@ -289,7 +290,7 @@ function ImageView({
       clearInterval(timer);
     };
   }, [path, bucket]);
-  return url ? <img src={url} alt="" onError={() => {
+  return url ? <img src={url} alt="" decoding="async" className={loadedUrl === url ? "soft-image is-loaded" : "soft-image"} onLoad={() => setLoadedUrl(url)} onError={() => {
     if (path) forgetImageUrl(repository, bucket, path);
     setImage({ path, bucket, url: "" });
   }} /> : null;
@@ -1698,6 +1699,7 @@ function NoteEditor({
             className="icon"
             aria-label={f.label}
             disabled={view}
+            onPointerDown={(e) => e.preventDefault()}
             onClick={() => format(f.before, f.after)}
           >
             <f.icon size={17} />
@@ -1725,6 +1727,7 @@ function NoteEditor({
           ref={area}
           className="note-body"
           aria-label="Текст записи Markdown"
+          spellCheck lang="ru"
           placeholder="О чём ты думаешь?"
           value={draft.body}
           onChange={(e) => change({ body: e.target.value })}

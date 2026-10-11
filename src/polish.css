@@ -730,3 +730,36 @@ dialog textarea {
   .toast-actions > button { min-height: 44px; font-size: 12px; }
   .keyboard-open .toast { bottom: 12px; }
 }
+
+/* Reserve only real covers; notes remain a calm writing surface. */
+.card-cover { aspect-ratio: 16 / 9; overflow: hidden; }
+.detail-cover { aspect-ratio: 16 / 10; overflow: hidden; }
+.card-cover img, .detail-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.soft-image { opacity: 0; transition: opacity 220ms ease-out; }
+.soft-image.is-loaded { opacity: 1; }
+@media (max-width: 700px) {
+  .editor-panel { padding: 14px 16px; overflow: visible; }
+  .editor-panel .formatting {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: #171c27;
+    padding: 6px 0;
+    border-bottom: 1px solid #2a3145;
+  }
+  .editor-panel .note-title { font-size: 22px; min-height: 44px; }
+  .editor-panel textarea.note-body {
+    font-size: 16px;
+    line-height: 1.75;
+    resize: none;
+    min-height: 280px;
+    scroll-margin-top: 64px;
+    padding-bottom: 28px;
+  }
+  .keyboard-open .editor-panel textarea.note-body { min-height: max(160px, calc(var(--visible-height) - 200px)); }
+  .editor-footer { flex-wrap: wrap; gap: 12px; padding-bottom: env(safe-area-inset-bottom); }
+  .editor-footer > button { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .soft-image { transition: none; }
+}
