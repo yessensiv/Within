@@ -6,13 +6,13 @@
 .note-filters > .custom-select:only-child { grid-column: 1 / -1; }
 .note-filters .select-trigger { min-height: 44px; padding: 10px 12px; border-radius: 12px; font-size: 12px; gap: 6px; }
 .note-filters .select-trigger > svg { width: 14px; flex-shrink: 0; }
-.note-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.note-tags span, .note-tags button { background: #a9a4f510; color: #c6c2ff; border-radius: 8px; padding: 5px 9px; font-size: 11px; overflow-wrap: anywhere; }
+.note-item > .note-tags { display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; gap: 6px; margin: 10px 0 12px; }
+.note-tags span, .note-tags button { background: #a9a4f50d; border: 1px solid #a9a4f51c; color: #bbb7e8; border-radius: 7px; padding: 3px 8px; font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; max-width: 100%; }
 .note-tags button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
 .tag-editor { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-.editor-tag { display: inline-flex; align-items: center; gap: 2px; padding-left: 12px; border: 1px solid #a9a4f530; border-radius: 100px; background: #a9a4f50b; color: #c6c2ff; font-size: 12px; min-height: 36px; max-width: 100%; }
+.editor-tag { display: inline-flex; align-items: center; gap: 3px; padding-left: 10px; border: 1px solid #a9a4f526; border-radius: 9px; background: #a9a4f50d; color: #c6c2ff; font-size: 12px; min-height: 36px; max-width: 100%; }
 .editor-tag > span { overflow-wrap: anywhere; }
-.editor-tag button { display: inline-flex; justify-content: center; align-items: center; width: 36px; min-height: 36px; padding: 0; border: 0; background: transparent; border-radius: 100px; color: #98a0b8; }
+.editor-tag button { display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; width: 32px; min-height: 36px; padding: 0; border: 0; background: transparent; border-radius: 8px; color: #838aa2; }
 .editor-tag button:hover { color: var(--text); background: #a9a4f515; }
 .tag-editor .tag-add { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 6px 12px; border: 1px dashed #98a0b845; border-radius: 100px; background: transparent; color: #98a0b8; font-size: 12px; }
 .tag-editor .tag-add:hover { border-color: #a9a4f590; color: var(--accent); background: #a9a4f508; }
