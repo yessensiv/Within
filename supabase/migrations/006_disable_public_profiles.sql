@@ -1,4 +1,6 @@
 begin;
+-- Maintenance updates must accept today's calendar date in every timezone.
+select set_config('request.headers', '{"x-client-timezone":"Pacific/Kiritimati"}', true);
 update public.profiles set is_public = false where is_public;
 update public.goals set is_public = false where is_public;
 update public.memories set is_public = false where is_public;
