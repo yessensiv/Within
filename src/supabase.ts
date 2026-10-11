@@ -7,7 +7,9 @@ import { validateImage } from "./repository";
 const env = import.meta.env;
 export const supabase =
   env.VITE_SUPABASE_URL && env.VITE_SUPABASE_ANON_KEY
-    ? createClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_ANON_KEY)
+    ? createClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_ANON_KEY, {
+        global: { headers: { "x-client-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone } },
+      })
     : null;
 export const googleEnabled = env.VITE_ENABLE_GOOGLE === "true";
 export class SupabaseRepository implements Repository {

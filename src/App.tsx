@@ -45,6 +45,7 @@ import {
   Wallet,
   User,
   RotateCcw,
+  CircleAlert,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -1238,7 +1239,7 @@ function App() {
       {toast && (
         <div className="toast" role="status">
           <div className="toast-message">
-            <Check size={18} aria-hidden="true" />
+            {toast.text.startsWith("Не удалось") ? <CircleAlert size={18} aria-hidden="true" style={{color:"#f29aab"}} /> : <Check size={18} aria-hidden="true" />}
             <span>{toast.text}</span>
           </div>
           {(toast.memory || toast.action) && (
