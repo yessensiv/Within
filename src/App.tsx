@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useId } from "react";
 import { authErrorMessage } from "./auth-errors";
+import { noteVersions, preserveVersion, type NoteVersion } from "./note-history";
 import { cachedImageUrl, loadImageUrl, forgetImageUrl } from "./image-cache";
 import {
   useBlocker,
@@ -1505,6 +1506,17 @@ function NoteEditor({
   });
   const [state, setState] = useState("Сохранено");
   const [view, setView] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [history, setHistory] = useState<NoteVersion[] | null>(null);
+  const [version, setVersion] = useState<NoteVersion | null>(null);
+  const [historyError, setHistoryError] = useState("");
+  useEffect(() => {
+    if (!focused) return;
+    document.body.classList.add("writing-focus");
+    const escape = (e: KeyboardEvent) => { if (e.key === "Escape") setFocused(false); };
+    window.addEventListener("keydown", escape);
+    return () => { document.body.classList.remove("writing-focus"); window.removeEventListener("keydown", escape); };
+  }, [focused]);
   const area = useRef<HTMLTextAreaElement>(null);
   const latest = useRef(draft);
   const persisted = useRef(JSON.stringify(note));
@@ -1527,6 +1539,8 @@ function NoteEditor({
           await repository.saveNote(n);
           saved(n);
         });
+        try { preserveVersion(JSON.parse(persisted.current) as Note, snapshot); }
+        catch { setHistoryError("Не удалось сохранить историю в браузере. Текст записи сохранён."); }
         persisted.current = JSON.stringify(snapshot);
         failed.current = false;
         if (JSON.stringify(latest.current) === persisted.current) {
@@ -1630,6 +1644,19 @@ function NoteEditor({
         <ArrowLeft size={18} />
         Назад
       </button>
+      <div className="writing-actions">
+        <button className="secondary" aria-pressed={focused} onClick={() => setFocused(v => !v)}>{focused ? "Вернуться" : "Сосредоточиться"}</button>
+        <button className="text-button" onClick={async () => { await saveRef.current(); if (failed.current) return; setHistory(noteVersions(note.user_id, note.id)); setVersion(null); }}>История изменений</button>
+      </div>
+      {historyError && <p role="alert" className="error">{historyError}</p>}
+      {history && <Modal title="История изменений" close={() => { setHistory(null); setVersion(null); }}>
+        <p className="muted">Предыдущие версии хранятся в этом браузере. Сохраняются последние 100 изменений.</p>
+        {!history.length && <p>Здесь появятся предыдущие версии после изменения текста.</p>}
+        <div className="version-list">{history.map(v => <button className={version?.id === v.id ? "version-item selected" : "version-item"} key={v.id} onClick={() => setVersion(v)}>
+          <strong>{v.title || "Без названия"}</strong><small>{new Date(v.saved_at).toLocaleString("ru")}</small>
+        </button>)}</div>
+        {version && <div className="version-preview"><h3>{version.title || "Без названия"}</h3><Markdown body={version.body} /><button className="primary" onClick={() => { change({title: version.title, body: version.body}); setView(false); setHistory(null); setVersion(null); }}>Восстановить эту версию</button></div>}
+      </Modal>}
       <div className="editor-meta">
         <span>
           {new Date(note.created_at).toLocaleDateString("ru", {

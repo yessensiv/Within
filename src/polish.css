@@ -827,3 +827,26 @@ dialog textarea {
   .bottom-nav a.active { color: #c6c2ff; background: #a9a4f513; }
   .dialog-head { margin-bottom: 16px; }
 }
+
+.writing-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.writing-actions button { font-size: 12px; min-height: 44px; }
+.writing-focus .sidebar, .writing-focus .mobile-header, .writing-focus .bottom-nav,
+.writing-focus .note-list, .writing-focus main > .page-head, .writing-focus .notebook > section:first-child { display: none; }
+.writing-focus main { margin-left: 0; max-width: 980px; width: 100%; margin-inline: auto; padding: 24px; }
+.writing-focus .notebook { display: block; height: auto; }
+.writing-focus .editor-panel { min-height: calc(100dvh - 48px); height: auto; max-height: none; }
+.writing-focus .editor-panel > .mobile-back { display: none; }
+.writing-focus .note-body { min-height: 45dvh; }
+.version-list { display: grid; gap: 6px; max-height: 220px; overflow-y: auto; margin-bottom: 18px; }
+.version-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--border); text-align: left; min-height: 44px; }
+.version-item strong { overflow-wrap: anywhere; }
+.version-item small { color: var(--muted); flex-shrink: 0; }
+.version-item.selected { border-color: var(--accent); background: #a9a4f510; }
+.version-preview { max-height: 45dvh; overflow-y: auto; overflow-wrap: anywhere; }
+.version-preview .primary { margin-top: 16px; }
+@media (max-width:700px) {
+ .writing-focus main { padding: 10px; }
+ .writing-focus .editor-panel { min-height: calc(var(--visible-height) - 20px); }
+ .version-item { align-items: flex-start; flex-direction: column; gap: 4px; }
+ .writing-actions { gap: 4px; margin-bottom: 12px; }
+}
