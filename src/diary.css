@@ -14,7 +14,7 @@
 .editor-tag > span { overflow-wrap: anywhere; }
 .editor-tag button { display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; width: 32px; min-height: 36px; padding: 0; border: 0; background: transparent; border-radius: 8px; color: #838aa2; }
 .editor-tag button:hover { color: var(--text); background: radial-gradient(circle at center, #a9a4f51c 12px, transparent 13px); }
-.icon[aria-label^="Закрыть"]:hover { background: radial-gradient(circle at center, #a9a4f51c 14px, transparent 15px); color: var(--text); }
+.icon[aria-label^="Закрыть"]:hover, .icon[aria-label="Очистить поиск"]:hover { background: radial-gradient(circle at center, #a9a4f51c 14px, transparent 15px); color: var(--text); }
 .tag-editor .tag-add { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 6px 12px; border: 1px dashed #98a0b845; border-radius: 100px; background: transparent; color: #98a0b8; font-size: 12px; }
 .tag-editor .tag-add:hover { border-color: #a9a4f590; color: var(--accent); background: #a9a4f508; }
 .tag-input { display: flex; align-items: center; width: 220px; max-width: 100%; border: 1px solid #a9a4f560; border-radius: 100px; background: #111620; overflow: hidden; }
