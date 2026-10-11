@@ -493,6 +493,7 @@ function App() {
         "--visible-height",
         `${viewport?.height || window.innerHeight}px`,
       );
+      document.documentElement.style.setProperty("--keyboard-inset", `${viewport ? Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop) : 0}px`);
       document.documentElement.classList.toggle(
         "keyboard-open",
         !!viewport && window.innerHeight - viewport.height > 150,
@@ -1463,6 +1464,20 @@ function NoteEditor({
     return () => { document.body.classList.remove("writing-focus"); window.removeEventListener("keydown", escape); };
   }, [focused]);
   const area = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const resize = () => {
+      const field = area.current;
+      if (!field) return;
+      if (window.matchMedia("(max-width: 700px)").matches) {
+        field.style.height = "auto";
+        field.style.height = `${field.scrollHeight}px`;
+      } else field.style.removeProperty("height");
+    };
+    resize();
+    window.addEventListener("resize", resize);
+    window.visualViewport?.addEventListener("resize", resize);
+    return () => { window.removeEventListener("resize", resize); window.visualViewport?.removeEventListener("resize", resize); };
+  }, [draft.body, view]);
   const latest = useRef(draft);
   const persisted = useRef(JSON.stringify(note));
   const inFlight = useRef<Promise<void> | null>(null);
