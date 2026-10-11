@@ -1047,7 +1047,8 @@ function App() {
                     публикации нужен Supabase.
                   </p>
                 )}
-                <hr />
+              </section>
+              <section className="settings-card">
                 <h2>Мои данные</h2>
                 <button
                   className="secondary"

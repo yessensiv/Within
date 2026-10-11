@@ -1,4 +1,32 @@
 /* Quiet diary: display typography, short excerpts, photographs only when present. */
+.goal-card { border-color: #2a314590; background: #171c27; }
+.goal-card .card-content { padding: 20px 20px 16px; }
+.goal-card .category { background: transparent; padding: 0; font-size: 12px; opacity: .85; }
+.goal-card h3 { font-size: 21px; line-height: 1.4; margin: 16px 0 8px; letter-spacing: -.5px; }
+.goal-card .card-content p { font-size: 13px; line-height: 1.7; margin-bottom: 0; }
+.goal-card .card-top > svg { width: 16px; opacity: .45; }
+.goal-card .card-footer { background: transparent; border-top-color: #2a314560; padding: 6px 20px; min-height: 54px; }
+.goal-card .card-footer .switch-wrap { min-height: 44px; font-size: 12px; }
+.goal-card.selected { border-color: #a9a4f590; box-shadow: none; }
+.note-item { padding: 16px; border-radius: 12px; }
+.note-item.selected { border-color: transparent; border-left-color: #a9a4f5; background: #a9a4f50b; }
+.note-item h3 { font-size: 14px; line-height: 1.5; }
+.note-item small { font-size: 11px; }
+.editor-panel .formatting .icon { background: transparent; border: 0; border-radius: 8px; min-width: 44px; min-height: 44px; }
+.editor-panel .formatting .icon:hover { background: #a9a4f512; color: var(--accent); }
+.editor-panel .formatting { gap: 4px; padding-block: 6px; }
+.settings-layout { gap: 16px; align-items: start; }
+.settings-card { padding: 22px; background: #171c2780; border-color: #2a314590; }
+.settings-card h2 { font-size: 17px; letter-spacing: -.3px; margin-top: 0; margin-bottom: 16px; }
+.settings-card .secondary { min-height: 44px; padding: 10px 14px; background: transparent; font-size: 12px; }
+.settings-card .notice { line-height: 1.75; }
+@media (max-width: 700px) {
+  .goal-card .card-content { padding: 16px; }
+  .goal-card h3 { font-size: 18px; margin-top: 12px; }
+  .goal-card .category { font-size: 11px; }
+  .goal-card .card-footer { padding: 4px 16px; }
+  .settings-card { padding: 18px; }
+}
 :root { --diary-type: "Manrope", Inter, system-ui, sans-serif; }
 .brand > span { font-family: var(--diary-type); font-weight: 600; }
 .brand small { font-family: "Manrope", system-ui, sans-serif; }
