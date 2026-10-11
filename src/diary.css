@@ -1,0 +1,65 @@
+/* Quiet diary: display typography, short excerpts, photographs only when present. */
+:root { --diary-type: Georgia, "Times New Roman", serif; }
+.brand > span { font-family: var(--diary-type); font-weight: 400; }
+.brand small { font-family: "Manrope", system-ui, sans-serif; }
+.space-note { background: #171c27; border-color: #2a314580; }
+.space-note p { font-family: var(--diary-type); font-size: 23px; font-weight: 400; line-height: 1.35; }
+.space-note > svg { width: 18px; opacity: .7; }
+.sidebar nav a.active { border-color: transparent; border-left-color: var(--accent); }
+.diary-heading h1 { font-family: var(--diary-type); font-weight: 400; font-size: 42px; letter-spacing: -1px; }
+.diary-heading p { margin-top: 8px; }
+.journey-album { max-width: 1400px; }
+.journey-album .journey { max-width: 940px; }
+.journey-album .month { font-family: var(--diary-type); font-size: 25px; font-weight: 400; gap: 10px; margin: 8px 0 24px; }
+.journey-album .month small { font-family: inherit; font-size: 20px; }
+.journey-album .month::after { background: #2a314580; }
+.journey-album .journey-content { background: #171c2780; border-color: #2a314590; align-items: center; }
+.journey-album .journey-content:hover { background: #171c27; border-color: #484660; }
+.journey-album .is-selected .journey-content { border-color: #a9a4f5b0; background: #a9a4f508; box-shadow: none; }
+.journey-album .journey-card-text,
+.journey-album.has-memory .journey-card-text { padding: 18px 20px 12px; }
+.journey-album .journey-content h2,
+.journey-album.has-memory .journey-content h2 { font-family: var(--diary-type); font-size: 24px; font-weight: 400; letter-spacing: -.3px; margin: 10px 0 8px; line-height: 1.35; }
+.journey-title-button { min-height: 44px; line-height: 1.35; }
+.journey-album .category { background: transparent; padding: 0; font-size: 12px; }
+.journey-album .journey-excerpt { border: 0; padding: 0; margin: 6px 0 10px; line-height: 1.7; -webkit-line-clamp: 2; white-space: normal; }
+.journey-album .journey-memory-link { min-height: 44px; padding: 8px 0; font-size: 12px; background: transparent; }
+.journey-album .journey-date strong { font-family: var(--diary-type); font-weight: 400; color: var(--text); font-size: 30px; }
+.journey-album .journey-cover,
+.journey-album.has-memory .journey-cover { order: 2; width: 120px; height: 132px; align-self: center; margin: 14px 14px 14px 0; border-radius: 10px; }
+.journey-album.has-memory { grid-template-columns: minmax(0, 1fr) 380px; gap: 28px; }
+.memory-panel { background: #171c2740; border: 1px solid #2a314580; padding: 24px; }
+.memory-panel .dialog-head h2 { font-family: var(--diary-type); font-size: 23px; font-weight: 400; }
+.memory-cover { aspect-ratio: 16 / 10; overflow: hidden; border-radius: 12px; margin: 20px 0; }
+.memory-cover img { width: 100%; height: 100%; object-fit: cover; }
+.memory-title { font-family: var(--diary-type); font-size: 32px; font-weight: 400; line-height: 1.25; margin: 20px 0 12px; overflow-wrap: anywhere; }
+.memory-reading { border-top: 1px solid #2a314580; margin-top: 22px; padding-top: 10px; }
+.memory-prose { font-size: var(--reading-font-size, 16px); line-height: 1.85; color: #d0d3e1; overflow-wrap: anywhere; }
+.memory-prose p { margin: 16px 0 24px; }
+.memory-reading > button { min-height: 44px; margin-top: 12px; }
+@media (max-width: 1190px) and (min-width: 701px) {
+  .journey-album.has-memory { grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; }
+  .journey-album.has-memory .journey-cover { width: 76px; height: 100px; }
+}
+@media (max-width: 1049px) { .journey-album.has-memory { display: block; } }
+@media (max-width: 700px) {
+  .diary-heading h1 { font-size: 32px; }
+  .journey-album .month { font-size: 23px; margin-bottom: 18px; }
+  .journey-album .month small { font-size: 17px; }
+  .journey-album .journey-card-text,
+  .journey-album.has-memory .journey-card-text { padding: 14px 14px 8px; }
+  .journey-album .journey-content h2,
+  .journey-album.has-memory .journey-content h2 { font-size: 22px; }
+  .journey-album .journey-cover,
+  .journey-album.has-memory .journey-cover { width: 76px; height: 100px; margin: 12px 12px 12px 0; }
+  .journey-album .journey-excerpt { font-size: 13px; }
+  .journey-album .journey-date strong { font-size: 23px; }
+  .memory-panel { padding: 18px; }
+  .memory-title { font-size: 29px; }
+  .memory-cover { margin: 16px 0; }
+}
+@media (max-width: 380px) {
+  .journey-album .journey-content { flex-wrap: wrap; }
+  .journey-album .journey-cover,
+  .journey-album.has-memory .journey-cover { width: calc(100% - 28px); height: 120px; margin: 0 14px 14px; }
+}

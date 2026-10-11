@@ -83,6 +83,7 @@ import {
 } from "./drafts";
 import "./style.css";
 import "./polish.css";
+import "./diary.css";
 import Select from "./Select";
 import ReadingSettings from "./ReadingSettings";
 const sortOptions = [
@@ -1813,7 +1814,7 @@ function Journey({
   let previous = "";
   return (
     <>
-      <div className="page-head">
+      <div className="page-head diary-heading">
         <div>
           <h1>Мой путь</h1>
           <p>То, что уже получилось</p>
@@ -1887,10 +1888,6 @@ function Journey({
                     <div className="journey-card-text">
                       <div className="journey-card-top">
                         <Category name={g.category} />
-                        <span className="journey-done">
-                          <Check size={13} />
-                          Выполнено
-                        </span>
                       </div>
                       <h2>
                         <button
@@ -1904,7 +1901,7 @@ function Journey({
                         </button>
                       </h2>
                       {m?.body && (
-                        <p className="journey-excerpt">{plain(m.body)}</p>
+                        <p className="journey-excerpt">«{plain(m.body)}»</p>
                       )}
                       <button
                         className="text-button journey-memory-link"
@@ -2001,10 +1998,12 @@ function MemoryEditor({
   const [isPublic, setPublic] = useState(existing?.is_public || false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [editing, setEditing] = useState(!existing);
   return (
     <MemoryFrame inline={inline} title="Воспоминание" close={close}>
+      {goal.cover_path && <div className="memory-cover"><ImageView path={goal.cover_path} /></div>}
       <Category name={goal.category} />
-      <h2>{goal.title}</h2>
+      <h2 className="memory-title">{goal.title}</h2>
       <p className="muted">
         {new Date(goal.completed_on! + "T12:00:00").toLocaleDateString("ru", {
           day: "numeric",
@@ -2012,7 +2011,12 @@ function MemoryEditor({
           year: "numeric",
         })}
       </p>
-      <form
+      {!editing ? (
+        <div className="memory-reading">
+          <div className="memory-prose"><Markdown body={body} /></div>
+          <button className="secondary" onClick={() => setEditing(true)}><Pencil size={16} />Редактировать</button>
+        </div>
+      ) : <form
         onSubmit={async (e) => {
           e.preventDefault();
           setBusy(true);
@@ -2067,7 +2071,7 @@ function MemoryEditor({
             {busy ? "Сохранение…" : "Сохранить воспоминание"}
           </button>
         </div>
-      </form>
+      </form>}
     </MemoryFrame>
   );
 }
