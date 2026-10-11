@@ -2,9 +2,10 @@
 :root { --diary-type: "Manrope", Inter, system-ui, sans-serif; }
 .brand > span { font-family: var(--diary-type); font-weight: 600; }
 .brand small { font-family: "Manrope", system-ui, sans-serif; }
-.space-note { background: #171c27; border-color: #2a314580; }
-.space-note p { font-family: var(--diary-type); font-size: 23px; font-weight: 600; line-height: 1.35; }
-.space-note > svg { width: 18px; opacity: .7; }
+.space-note { position: relative; margin: 32px 0 28px; padding: 4px 0 4px 17px; border: 0; border-left: 2px solid #a9a4f550; border-radius: 0; background: transparent; box-shadow: none; }
+.space-note p { font-family: var(--diary-type); font-size: 17px; font-weight: 600; line-height: 1.5; margin: 0 0 10px; letter-spacing: -.3px; color: #d8dbea; }
+.space-note > svg { display: none; }
+.space-note small { display: block; font-size: 12px; line-height: 1.8; color: var(--muted); }
 .sidebar nav a.active { border-color: transparent; border-left-color: var(--accent); }
 .diary-heading h1 { font-family: var(--diary-type); font-weight: 600; font-size: 42px; letter-spacing: -1px; }
 .diary-heading p { margin-top: 8px; }
