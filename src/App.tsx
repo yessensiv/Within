@@ -1352,6 +1352,7 @@ function Notes({
               </button>
             ))}
           </div>
+          <div className="note-filters">
           <Select
             className="note-sort"
             label="Сортировка записей"
@@ -1359,8 +1360,9 @@ function Notes({
             onChange={(value) => setSortOrder(value as GoalSort)}
             options={sortOptions}
           />
+          {(allTags.length > 0 || tag) && <Select label="Фильтр по тегу" value={tag} onChange={setTag} options={[{value:"",label:"Все теги"},...allTags.map(t=>({value:t,label:t}))]} />}
+          </div>
           <div className="note-items">
-            {(allTags.length > 0 || tag) && <Select label="Фильтр по тегу" value={tag} onChange={setTag} options={[{value:"",label:"Все теги"},...allTags.map(t=>({value:t,label:t}))]} />}
             {notes.map((n) => (
               <button
                 key={n.id}
