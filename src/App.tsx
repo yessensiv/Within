@@ -82,6 +82,7 @@ import "./diary.css";
 import Select from "./Select";
 import ReadingSettings from "./ReadingSettings";
 import { normalizeTags, parseMarkdown } from "./note-import";
+import { keepMobileCaretVisible } from "./mobile-caret";
 const sortOptions = [
   { value: "newest", label: "Сначала новые" },
   { value: "oldest", label: "Сначала старые" },
@@ -1471,6 +1472,7 @@ function NoteEditor({
       if (window.matchMedia("(max-width: 700px)").matches) {
         field.style.height = "auto";
         field.style.height = `${field.scrollHeight}px`;
+        requestAnimationFrame(() => keepMobileCaretVisible(field));
       } else field.style.removeProperty("height");
     };
     resize();
@@ -1714,6 +1716,8 @@ function NoteEditor({
           className="note-body"
           aria-label="Текст записи Markdown"
           spellCheck lang="ru"
+          onSelect={e => { const field = e.currentTarget; requestAnimationFrame(() => keepMobileCaretVisible(field)); }}
+          onFocus={e => { const field = e.currentTarget; requestAnimationFrame(() => keepMobileCaretVisible(field)); }}
           placeholder="О чём ты думаешь?"
           value={draft.body}
           onChange={(e) => change({ body: e.target.value })}
