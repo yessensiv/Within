@@ -1420,10 +1420,11 @@ function Notes({
 }
 function NoteTags({tags, change}: {tags:string[];change:(tags:string[])=>void}) {
   const [input, setInput] = useState("");
-  function add() { if (input.trim()) change(normalizeTags([...tags, ...input.split(",")])); setInput(""); }
+  const [open, setOpen] = useState(false);
+  function add() { if (input.trim()) change(normalizeTags([...tags, ...input.split(",")])); setInput(""); setOpen(false); }
   return <div className="tag-editor">
-    <div className="note-tags">{tags.map(t=><button key={t} type="button" aria-label={`Убрать тег ${t}`} onClick={()=>change(tags.filter(v=>v!==t))}>{t}<X size={12} /></button>)}</div>
-    <div className="tag-input"><input aria-label="Новый тег" placeholder={tags.length >= 12 ? "Добавлено 12 тегов" : "Добавить тег"} maxLength={40} disabled={tags.length>=12} value={input} onChange={e=>setInput(e.target.value)} onBlur={add} onKeyDown={e=>{if(e.key==="Enter" || e.key===","){e.preventDefault();add();}}} /><button className="icon" type="button" aria-label="Добавить тег" disabled={!input.trim() || tags.length>=12} onMouseDown={e=>e.preventDefault()} onClick={add}><Plus size={16}/></button></div>
+    {tags.map(t=><span className="editor-tag" key={t}><span>{t}</span><button type="button" aria-label={`Убрать тег ${t}`} onClick={()=>change(tags.filter(v=>v!==t))}><X size={12} /></button></span>)}
+    {open ? <div className="tag-input"><input autoFocus aria-label="Новый тег" placeholder="Название тега" maxLength={40} value={input} onChange={e=>setInput(e.target.value)} onBlur={add} onKeyDown={e=>{if(e.key==="Escape"){e.stopPropagation();setInput("");setOpen(false);}else if(e.key==="Enter" || e.key===","){e.preventDefault();add();}}} /><button className="icon" type="button" aria-label="Сохранить тег" disabled={!input.trim()} onMouseDown={e=>e.preventDefault()} onClick={add}><Check size={15}/></button></div> : tags.length < 12 && <button className="tag-add" type="button" onClick={()=>setOpen(true)}><Plus size={14}/>Добавить тег</button>}
   </div>;
 }
 function NoteEditor({
