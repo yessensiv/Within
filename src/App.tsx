@@ -84,6 +84,7 @@ import {
 import "./style.css";
 import "./polish.css";
 import Select from "./Select";
+import ReadingSettings from "./ReadingSettings";
 const sortOptions = [
   { value: "newest", label: "Сначала новые" },
   { value: "oldest", label: "Сначала старые" },
@@ -979,6 +980,7 @@ function App() {
               </div>
             </div>
             <div className="settings-layout">
+              <ReadingSettings />
               <section className="settings-card">
                 <h2>О тебе</h2>
                 <ProfileForm
