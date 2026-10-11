@@ -76,6 +76,7 @@ export class LocalRepository implements Repository {
     const i = d.notes.findIndex((n) => n.id === note.id);
     if (i < 0) throw new Error("Запись недоступна");
     preserveVersion(d.notes[i], note);
+    d.notes[i].tags = note.tags || [];
     d.notes[i] = {
       ...d.notes[i],
       title: note.title,

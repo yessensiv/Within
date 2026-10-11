@@ -81,6 +81,7 @@ import "./polish.css";
 import "./diary.css";
 import Select from "./Select";
 import ReadingSettings from "./ReadingSettings";
+import { normalizeTags, parseMarkdown } from "./note-import";
 const sortOptions = [
   { value: "newest", label: "Сначала новые" },
   { value: "oldest", label: "Сначала старые" },
@@ -1240,6 +1241,11 @@ function Notes({
   const location = useLocation();
   const [q, setQ] = useState("");
   const [pinned, setPinned] = useState(false);
+  const [tag, setTag] = useState("");
+  const [imported, setImported] = useState<{title:string;body:string} | null>(null);
+  const [importBusy, setImportBusy] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const allTags = [...new Set(data.notes.filter(n => !n.deleted_at).flatMap(n => n.tags || []))].sort((a,b)=>a.localeCompare(b,"ru"));
   const [sortOrder, setSortOrder] = useState<GoalSort>("newest");
   const [selection, setSelection] = useState("");
   const notes = sortNotes(
@@ -1247,6 +1253,7 @@ function Notes({
       (n) =>
         !n.deleted_at &&
         (!pinned || n.pinned) &&
+        (!tag || n.tags?.includes(tag)) &&
         `${n.title} ${n.body}`
           .toLocaleLowerCase("ru")
           .includes(q.toLocaleLowerCase("ru")),
@@ -1263,6 +1270,16 @@ function Notes({
           <h1>Блокнот</h1>
           <p>Место для мыслей. Просто пиши.</p>
         </div>
+        <div className="notes-head-actions">
+        <input ref={fileInput} type="file" accept=".md,.markdown" hidden onChange={async e => {
+          const file = e.target.files?.[0]; e.target.value = "";
+          if (!file) return;
+          if (!/\.(md|markdown)$/i.test(file.name)) { notify("Выберите файл .md или .markdown"); return; }
+          if (file.size > 2 * 1024 * 1024) { notify("Файл должен быть меньше 2 МБ"); return; }
+          try { setImported(parseMarkdown(file.name, await file.text())); }
+          catch { notify("Не удалось прочитать файл"); }
+        }} />
+        <button className="secondary" onClick={() => fileInput.current?.click()}><Download size={16} />Импорт Markdown</button>
         <button
           className="primary"
           onClick={async () => {
@@ -1291,7 +1308,21 @@ function Notes({
           <Plus size={18} />
           Новая запись
         </button>
+        </div>
       </div>
+      {imported && <Modal title="Импорт Markdown" close={() => { if (!importBusy) setImported(null); }}>
+        <p className="muted">Будет создана новая запись. Существующие записи сохранятся.</p>
+        <label>Название<input value={imported.title} onChange={e=>setImported({...imported,title:e.target.value})} /></label>
+        <div className="import-preview"><Markdown body={imported.body} /></div>
+        <div className="dialog-actions"><button className="secondary" disabled={importBusy} onClick={()=>setImported(null)}>Отмена</button><button className="primary" disabled={importBusy || !imported.title.trim()} onClick={async()=>{
+          if (!(await beforeLeaveNote())) return;
+          setImportBusy(true);
+          const now=stamp(); const n:Note={...imported,title:imported.title.trim(),id:crypto.randomUUID(),user_id:data.profile.id,tags:[],pinned:false,goal_id:null,deleted_at:null,created_at:now,updated_at:now};
+          try { await put("notes",n); setImported(null); setSelection(n.id); nav("/notes/"+n.id); notify("Запись импортирована"); }
+          catch { notify("Не удалось импортировать запись. Попробуйте ещё раз."); }
+          finally { setImportBusy(false); }
+        }}>{importBusy ? "Импорт…" : "Импортировать"}</button></div>
+      </Modal>}
       <div className="notebook">
         <section
           className={
@@ -1327,6 +1358,7 @@ function Notes({
             options={sortOptions}
           />
           <div className="note-items">
+            {(allTags.length > 0 || tag) && <Select label="Фильтр по тегу" value={tag} onChange={setTag} options={[{value:"",label:"Все теги"},...allTags.map(t=>({value:t,label:t}))]} />}
             {notes.map((n) => (
               <button
                 key={n.id}
@@ -1344,6 +1376,7 @@ function Notes({
                   {n.pinned && <Pin size={15} />}
                 </div>
                 <p>{plain(n.body) || "Можно просто начать писать…"}</p>
+                {!!n.tags?.length && <div className="note-tags">{n.tags.map(t=><span key={t}>{t}</span>)}</div>}
                 <small>
                   {new Date(n.updated_at).toLocaleDateString("ru", {
                     day: "numeric",
@@ -1356,7 +1389,7 @@ function Notes({
               <Empty
                 icon={BookOpen}
                 text={
-                  q ? "Ничего не найдено" : "Здесь можно просто начать писать"
+                  q || tag || pinned ? "Ничего не найдено" : "Здесь можно просто начать писать"
                 }
               />
             )}
@@ -1384,6 +1417,14 @@ function Notes({
       </div>
     </>
   );
+}
+function NoteTags({tags, change}: {tags:string[];change:(tags:string[])=>void}) {
+  const [input, setInput] = useState("");
+  function add() { if (input.trim()) change(normalizeTags([...tags, ...input.split(",")])); setInput(""); }
+  return <div className="tag-editor">
+    <div className="note-tags">{tags.map(t=><button key={t} type="button" aria-label={`Убрать тег ${t}`} onClick={()=>change(tags.filter(v=>v!==t))}>{t}<X size={12} /></button>)}</div>
+    <div className="tag-input"><input aria-label="Новый тег" placeholder={tags.length >= 12 ? "Добавлено 12 тегов" : "Добавить тег"} maxLength={40} disabled={tags.length>=12} value={input} onChange={e=>setInput(e.target.value)} onBlur={add} onKeyDown={e=>{if(e.key==="Enter" || e.key===","){e.preventDefault();add();}}} /><button className="icon" type="button" aria-label="Добавить тег" disabled={!input.trim() || tags.length>=12} onMouseDown={e=>e.preventDefault()} onClick={add}><Plus size={16}/></button></div>
+  </div>;
 }
 function NoteEditor({
   note,
@@ -1609,6 +1650,7 @@ function NoteEditor({
         value={draft.title}
         onChange={(e) => change({ title: e.target.value })}
       />
+      <NoteTags tags={draft.tags || []} change={tags=>change({tags})} />
       <div className="formatting">
         {[
           { icon: Bold, label: "Жирный", before: "**", after: "**" },

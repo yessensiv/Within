@@ -1,4 +1,15 @@
 /* Quiet diary: display typography, short excerpts, photographs only when present. */
+.notes-head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.notes-head-actions button { min-height: 44px; }
+.note-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.note-tags span, .note-tags button { background: #a9a4f510; color: #c6c2ff; border-radius: 8px; padding: 5px 9px; font-size: 11px; overflow-wrap: anywhere; }
+.note-tags button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+.tag-editor { margin-bottom: 10px; }
+.tag-input { display: flex; align-items: center; max-width: 260px; gap: 4px; }
+.tag-input input { min-width: 0; font-size: 13px; padding: 8px 10px; min-height: 44px; }
+.tag-input .icon { min-width: 44px; min-height: 44px; }
+.import-preview { margin: 16px 0; max-height: 38dvh; overflow: auto; overflow-wrap: anywhere; border: 1px solid var(--border); border-radius: 12px; padding: 16px; line-height: 1.75; }
+@media(max-width:700px) { .notes-head-actions { justify-content: flex-end; } .notes-head-actions button { font-size: 11px; padding: 8px 10px; } }
 .goal-card { border-color: #2a314590; background: #171c27; }
 .goal-card .card-content { padding: 20px 20px 16px; }
 .goal-card .category { background: transparent; padding: 0; font-size: 12px; opacity: .85; }

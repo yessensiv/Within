@@ -22,6 +22,7 @@ export type Goal = {
   updated_at: string;
 };
 export type Note = {
+  tags?: string[];
   id: string;
   user_id: string;
   title: string;

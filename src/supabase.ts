@@ -61,7 +61,7 @@ export class SupabaseRepository implements Repository {
   async saveNote(note: Note) {
     const { error } = await supabase!
       .from("notes")
-      .update({ title: note.title, body: note.body })
+      .update({ title: note.title, body: note.body, tags: note.tags || [] })
       .eq("id", note.id)
       .eq("user_id", this.uid);
     if (error) throw error;
