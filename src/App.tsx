@@ -943,6 +943,7 @@ function App() {
                               ...r,
                               title: n.title,
                               body: n.body,
+                              tags: n.tags || [],
                               updated_at: n.updated_at,
                             }
                           : r,
