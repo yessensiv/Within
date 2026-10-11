@@ -1,5 +1,5 @@
 import { isInvalidAccount } from "./session-validation";
-import { noteVersions, type NoteVersion } from "./note-history";
+import { noteVersions, clearImportedHistory, type NoteVersion } from "./note-history";
 import { createClient, type Session } from "@supabase/supabase-js";
 import type { Data, Goal, Note, Memory, Profile } from "./domain";
 import type { Repository } from "./repository";
@@ -78,6 +78,9 @@ export class SupabaseRepository implements Repository {
       .select("id,title,body,saved_at").eq("user_id", this.uid)
       .eq("note_id", noteId).order("saved_at", { ascending: false }).limit(100);
     if (error) throw error;
+    if (local.length) {
+      try { clearImportedHistory(this.uid, noteId); } catch { /* Retry import safely next time. */ }
+    }
     return data as NoteVersion[];
   }
   async convert(note: Note, goal: Goal) {

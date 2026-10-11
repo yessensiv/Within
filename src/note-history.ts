@@ -1,6 +1,9 @@
 import type { Note } from "./domain";
 export type NoteVersion = { id: string; title: string; body: string; saved_at: string };
 const key = (uid: string, id: string) => `within-history:${uid}:${id}`;
+export function clearImportedHistory(uid: string, id: string) {
+  localStorage.removeItem(key(uid, id));
+}
 export function noteVersions(uid: string, id: string): NoteVersion[] {
   try { return JSON.parse(localStorage.getItem(key(uid, id)) || "[]"); } catch { return []; }
 }

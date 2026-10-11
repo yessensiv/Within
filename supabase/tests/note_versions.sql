@@ -15,6 +15,14 @@ update public.notes set pinned=true where id='77777777-7777-4777-8777-7777777777
 do $$ begin
  if (select count(*) from public.note_versions) <> 1 then raise exception 'Metadata generated version'; end if;
 end $$;
+update public.notes set body='Original text' where id='77777777-7777-4777-8777-777777777777';
+do $$ begin
+ if not exists(select 1 from public.note_versions where body='New text') then raise exception 'Restore lost replaced text'; end if;
+ for i in 1..105 loop
+  update public.notes set body='Version '||i where id='77777777-7777-4777-8777-777777777777';
+ end loop;
+ if (select count(*) from public.note_versions) <> 100 then raise exception 'Retention failed'; end if;
+end $$;
 select set_config('request.jwt.claim.sub','66666666-6666-4666-8666-666666666666',true);
 do $$ begin
  if exists(select 1 from public.note_versions) then raise exception 'Other user sees versions'; end if;
