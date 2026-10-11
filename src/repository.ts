@@ -1,5 +1,6 @@
 import type { Data, Goal, Note, Memory, Profile } from "./domain";
 import { seed, stamp, publicData } from "./domain";
+import { noteVersions, preserveVersion, type NoteVersion } from "./note-history";
 export interface Repository {
   demo: boolean;
   load(): Promise<Data>;
@@ -10,6 +11,7 @@ export interface Repository {
   remove(table: "goals" | "notes", id: string): Promise<void>;
   purge(): Promise<void>;
   saveNote(note: Note): Promise<void>;
+  history(uid: string, noteId: string): Promise<NoteVersion[]>;
   convert(note: Note, goal: Goal): Promise<string>;
   image(bucket: "covers" | "avatars", file: File): Promise<string>;
   url(bucket: "covers" | "avatars", path: string): Promise<string>;
@@ -73,6 +75,7 @@ export class LocalRepository implements Repository {
     const d = this.read();
     const i = d.notes.findIndex((n) => n.id === note.id);
     if (i < 0) throw new Error("Запись недоступна");
+    preserveVersion(d.notes[i], note);
     d.notes[i] = {
       ...d.notes[i],
       title: note.title,
@@ -80,6 +83,9 @@ export class LocalRepository implements Repository {
       updated_at: note.updated_at,
     };
     this.write(d);
+  }
+  async history(uid: string, noteId: string) {
+    return noteVersions(uid, noteId);
   }
   async convert(note: Note, goal: Goal) {
     const d = this.read();

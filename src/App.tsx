@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useId } from "react";
 import { authErrorMessage } from "./auth-errors";
-import { noteVersions, preserveVersion, type NoteVersion } from "./note-history";
+import { type NoteVersion } from "./note-history";
 import { cachedImageUrl, loadImageUrl, forgetImageUrl } from "./image-cache";
 import {
   useBlocker,
@@ -1539,8 +1539,6 @@ function NoteEditor({
           await repository.saveNote(n);
           saved(n);
         });
-        try { preserveVersion(JSON.parse(persisted.current) as Note, snapshot); }
-        catch { setHistoryError("Не удалось сохранить историю в браузере. Текст записи сохранён."); }
         persisted.current = JSON.stringify(snapshot);
         failed.current = false;
         if (JSON.stringify(latest.current) === persisted.current) {
@@ -1646,11 +1644,11 @@ function NoteEditor({
       </button>
       <div className="writing-actions">
         <button className="secondary" aria-pressed={focused} onClick={() => setFocused(v => !v)}>{focused ? "Вернуться" : "Сосредоточиться"}</button>
-        <button className="text-button" onClick={async () => { await saveRef.current(); if (failed.current) return; setHistory(noteVersions(note.user_id, note.id)); setVersion(null); }}>История изменений</button>
+        <button className="text-button" onClick={async () => { await saveRef.current(); if (failed.current) return; try { setHistory(await repository.history(note.user_id, note.id)); setVersion(null); setHistoryError(""); } catch { setHistoryError("Не удалось загрузить историю. Проверь соединение и попробуй снова."); } }}>История изменений</button>
       </div>
       {historyError && <p role="alert" className="error">{historyError}</p>}
       {history && <Modal title="История изменений" close={() => { setHistory(null); setVersion(null); }}>
-        <p className="muted">Предыдущие версии хранятся в этом браузере. Сохраняются последние 100 изменений.</p>
+        <p className="muted">{repository.demo ? "Предыдущие версии хранятся в этом браузере." : "Предыдущие версии сохраняются в аккаунте и доступны на других устройствах."} Сохраняются последние 100 изменений.</p>
         {!history.length && <p>Здесь появятся предыдущие версии после изменения текста.</p>}
         <div className="version-list">{history.map(v => <button className={version?.id === v.id ? "version-item selected" : "version-item"} key={v.id} onClick={() => setVersion(v)}>
           <strong>{v.title || "Без названия"}</strong><small>{new Date(v.saved_at).toLocaleString("ru")}</small>

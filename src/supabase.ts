@@ -1,4 +1,5 @@
 import { isInvalidAccount } from "./session-validation";
+import { noteVersions, type NoteVersion } from "./note-history";
 import { createClient, type Session } from "@supabase/supabase-js";
 import type { Data, Goal, Note, Memory, Profile } from "./domain";
 import type { Repository } from "./repository";
@@ -62,6 +63,22 @@ export class SupabaseRepository implements Repository {
       .eq("id", note.id)
       .eq("user_id", this.uid);
     if (error) throw error;
+  }
+  async history(_uid: string, noteId: string): Promise<NoteVersion[]> {
+    const client = supabase!;
+    const local = noteVersions(this.uid, noteId);
+    if (local.length) {
+      const { error } = await client.from("note_versions").upsert(
+        local.map(v => ({ ...v, user_id: this.uid, note_id: noteId })),
+        { onConflict: "id", ignoreDuplicates: true },
+      );
+      if (error) throw error;
+    }
+    const { data, error } = await client.from("note_versions")
+      .select("id,title,body,saved_at").eq("user_id", this.uid)
+      .eq("note_id", noteId).order("saved_at", { ascending: false }).limit(100);
+    if (error) throw error;
+    return data as NoteVersion[];
   }
   async convert(note: Note, goal: Goal) {
     const { data, error } = await supabase!.rpc("goal_from_note", {
