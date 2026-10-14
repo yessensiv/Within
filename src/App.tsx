@@ -708,7 +708,7 @@ function App() {
     <div className="app">
       <aside className="sidebar">
         <NavLink to="/goals" className="brand">
-          <Constellation />
+          <BrandMark />
           <span>
             Within<small>Личное пространство</small>
           </span>
@@ -760,7 +760,7 @@ function App() {
       <header className="mobile-header">
         <div>
           <NavLink to="/goals" className="brand">
-            <Constellation />
+            <BrandMark />
             Within
           </NavLink>
           {repository.demo && (
@@ -1181,32 +1181,8 @@ function App() {
     </div>
   );
 }
-function Constellation() {
-  return (
-    <svg
-      className="constellation"
-      width="38"
-      height="38"
-      viewBox="0 0 40 40"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M7 25L16 8L31 15L25 32L7 25L31 15M16 8L25 32"
-        stroke="currentColor"
-        strokeWidth="1"
-        opacity=".6"
-      />
-      {[
-        [7, 25],
-        [16, 8],
-        [31, 15],
-        [25, 32],
-      ].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r={i === 1 ? 3 : 2} fill="currentColor" />
-      ))}
-    </svg>
-  );
+function BrandMark() {
+  return <img className="brand-mark" src="/within-mark.svg" width="38" height="38" alt="" aria-hidden="true" />;
 }
 function Empty({
   icon: Icon,
@@ -2179,7 +2155,7 @@ function AuthPage() {
     <div className="auth">
       <section className="auth-card">
         <div className="brand">
-          <Constellation />
+          <BrandMark />
           Within
         </div>
         {sent ? (
@@ -2352,7 +2328,7 @@ function ResetPassword({
     <div className="auth">
       <section className="auth-card">
         <div className="brand">
-          <Constellation />
+          <BrandMark />
           Within
         </div>
         <h1>Новый пароль</h1>
@@ -2468,7 +2444,7 @@ function Welcome({
     <div className="auth">
       <section className="auth-card">
         <div className="brand">
-          <Constellation />
+          <BrandMark />
           Within
         </div>
         <h1>Привет, {session.user.user_metadata.display_name || "друг"}</h1>

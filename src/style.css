@@ -152,7 +152,7 @@ button:hover {
   letter-spacing: 0.15px;
   margin-top: 3px;
 }
-.constellation {
+.brand-mark {
   color: var(--accent);
 }
 .space-note {
@@ -1252,7 +1252,7 @@ form > label > select {
   .mobile-header .brand {
     font-size: 21px;
   }
-  .mobile-header .constellation {
+  .mobile-header .brand-mark {
     width: 30px;
     height: 30px;
   }

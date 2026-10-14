@@ -622,7 +622,7 @@ dialog textarea {
     background: #11151e;
   }
   .mobile-header .brand { font-size: 20px; gap: 10px; }
-  .mobile-header .constellation { width: 27px; height: 27px; }
+  .mobile-header .brand-mark { width: 27px; height: 27px; }
   .mobile-demo { font-size: 9px; margin-left: 37px; }
   main { padding: 22px 14px calc(94px + env(safe-area-inset-bottom)); }
   .page-head { margin-bottom: 20px; }
