@@ -1,4 +1,12 @@
 /* Quiet diary: display typography, short excerpts, photographs only when present. */
+:root { --bg: #0c1017; background: var(--bg); }
+body { background: var(--bg); }
+.app .editor-panel { background: #1a202d; border-color: #30384a; }
+.app .editor-panel:focus-within { border-color: #625c83; }
+.app .editor-panel .formatting { background: #1a202d; }
+.app .editor-panel .note-title, .app .editor-panel .note-body { background: transparent; }
+.app .editor-panel .editor-footer { border-top-color: #343c4f80; }
+.app .sidebar, .app .mobile-header { background: #10151e; border-color: #252d3d; }
 .editor-panel .note-title { margin: 4px 0 12px; padding: 8px 0; font-size: 28px; }
 .editor-panel .editor-meta { min-height: 36px; font-size: 11px; }
 .editor-panel textarea.note-body { color-scheme: dark; scrollbar-width: thin; scrollbar-color: #41495f transparent; }
