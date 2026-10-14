@@ -167,6 +167,31 @@ body { background: var(--bg); }
 }
 
 /* Shared field treatment; embedded editor and search inputs keep their own surface. */
+@media (max-width: 700px) {
+  dialog[open] {
+    position: fixed;
+    inset: auto;
+    top: calc(var(--modal-top, 0px) + 12px);
+    left: 12px;
+    width: calc(100% - 24px);
+    max-width: none;
+    max-height: calc(var(--modal-height, 100dvh) - 24px);
+    margin: 0;
+    padding: 18px 16px;
+    border-radius: 18px;
+    overscroll-behavior: contain;
+    scroll-padding-block: 16px;
+    animation: veil-arrive 180ms ease both;
+  }
+  dialog .dialog-head { margin-bottom: 16px; padding-bottom: 10px; }
+  dialog .dialog-head h2 { font-size: 20px; line-height: 1.35; }
+  dialog .dialog-head .icon { min-width: 44px; min-height: 44px; }
+  .goal-form > label { margin-bottom: 14px; font-size: 12px; }
+  .goal-form > label > input, .goal-form > label > textarea { padding: 10px 12px; font-size: 16px; }
+  .goal-form textarea { min-height: 112px; height: 112px; max-height: 200px; line-height: 1.6; resize: none; }
+  .goal-form > .dialog-actions { margin-top: 14px; padding-top: 12px; }
+  .goal-form .dialog-actions button { flex: 1; min-height: 44px; padding-inline: 10px; }
+}
 input:where(:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not(.note-title)),
 textarea:not(.note-body), select, .select-trigger, .search {
   border-color: #343c50;

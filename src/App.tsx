@@ -190,7 +190,28 @@ function Modal({
     const el = ref.current!;
     const previous = document.activeElement as HTMLElement;
     el.showModal();
+    const viewport = window.visualViewport;
+    let frame = 0;
+    const fitViewport = () => {
+      el.style.setProperty("--modal-height", `${viewport?.height || window.innerHeight}px`);
+      el.style.setProperty("--modal-top", `${viewport?.offsetTop || 0}px`);
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const field = document.activeElement;
+        if (window.matchMedia("(max-width: 700px)").matches && field instanceof HTMLElement && field.matches("input, textarea") && el.contains(field)) {
+          field.scrollIntoView({block: "nearest", behavior: "instant"});
+        }
+      });
+    };
+    fitViewport();
+    viewport?.addEventListener("resize", fitViewport);
+    viewport?.addEventListener("scroll", fitViewport);
+    window.addEventListener("resize", fitViewport);
     return () => {
+      cancelAnimationFrame(frame);
+      viewport?.removeEventListener("resize", fitViewport);
+      viewport?.removeEventListener("scroll", fitViewport);
+      window.removeEventListener("resize", fitViewport);
       el.close();
       previous?.focus();
     };
