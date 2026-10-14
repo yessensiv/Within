@@ -155,3 +155,26 @@
   .journey-album.has-memory .journey-cover { width: calc(100% - 28px); height: 120px; margin: 0 14px 14px; }
 }
 
+/* Shared field treatment; embedded editor and search inputs keep their own surface. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not(.note-title),
+textarea:not(.note-body), select, .select-trigger, .search {
+  border-color: #343c50;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not(.note-title):focus,
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not(.note-title):focus-visible,
+textarea:not(.note-body):focus, textarea:not(.note-body):focus-visible,
+select:focus, select:focus-visible,
+.select-trigger:focus-visible, .select-trigger[aria-expanded="true"], .search:focus-within,
+.tag-input:focus-within {
+  outline: none;
+  border-color: #8b86bd;
+  box-shadow: 0 0 0 3px #a9a4f50e;
+}
+.search input:focus, .search input:focus-visible,
+.tag-input input:focus, .tag-input input:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
