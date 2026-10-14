@@ -1,4 +1,30 @@
 /* Quiet diary: display typography, short excerpts, photographs only when present. */
+.editor-panel .note-title { margin: 4px 0 12px; padding: 8px 0; font-size: 28px; }
+.editor-panel .editor-meta { min-height: 36px; font-size: 11px; }
+.editor-panel textarea.note-body { color-scheme: dark; scrollbar-width: thin; scrollbar-color: #41495f transparent; }
+.editor-panel .formatting { flex-wrap: wrap; row-gap: 4px; }
+.editor-panel .formatting .writing-actions { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 0 auto; padding: 0; }
+.editor-panel .writing-actions .text-button { margin: 0; min-height: 44px; padding: 8px 10px; font-size: 11px; color: var(--muted); }
+.editor-panel .writing-actions .text-button:hover, .editor-panel .writing-actions [aria-pressed="true"] { color: var(--accent); background: #a9a4f50d; }
+.note-list .note-item.selected { box-shadow: inset 2px 0 0 var(--accent); }
+.note-item.selected h3 { color: #f0eeff; }
+.save-feedback { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; min-height: 36px; color: var(--muted); }
+.save-feedback > span { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; }
+.save-feedback[data-state="error"] { color: #efa3ae; }
+.save-feedback[data-state="error"] .text-button { color: #efa3ae; min-height: 44px; }
+.save-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.save-feedback[data-state="saving"] .save-dot { animation: save-pulse 1.2s ease-in-out infinite; }
+@keyframes save-pulse { 50% { opacity: .3; } }
+@media(prefers-reduced-motion: reduce) { .save-feedback[data-state="saving"] .save-dot { animation: none; } }
+@media(max-width:700px) {
+  main:has(.note-list.mobile-hidden) > .page-head { display: none; }
+  .editor-panel .note-title { font-size: 22px; margin-bottom: 8px; }
+  .editor-panel .formatting .writing-actions { width: 100%; justify-content: flex-end; border-top: 1px solid #2a314540; }
+  .keyboard-open .editor-panel .formatting .writing-actions { display: none; }
+  .editor-panel .note-body { scroll-margin-top: 120px; }
+  .save-feedback { width: 100%; }
+  .editor-panel .editor-footer { gap: 6px; padding-top: 10px; }
+}
 .notes-head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .notes-head-actions button { min-height: 44px; }
 .note-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 18px; flex-shrink: 0; }

@@ -1607,10 +1607,6 @@ function NoteEditor({
         <ArrowLeft size={18} />
         Назад
       </button>
-      <div className="writing-actions">
-        <button className="secondary" aria-pressed={focused} onClick={() => setFocused(v => !v)}>{focused ? "Вернуться" : "Сосредоточиться"}</button>
-        <button className="text-button" onClick={async () => { await saveRef.current(); if (failed.current) return; try { setHistory(await repository.history(note.user_id, note.id)); setVersion(null); setHistoryError(""); } catch { setHistoryError("Не удалось загрузить историю. Проверь соединение и попробуй снова."); } }}>История изменений</button>
-      </div>
       {historyError && <p role="alert" className="error">{historyError}</p>}
       {history && <Modal title="История изменений" close={() => { setHistory(null); setVersion(null); }}>
         <p className="muted">{repository.demo ? "Предыдущие версии хранятся в этом браузере." : "Предыдущие версии сохраняются в аккаунте и доступны на других устройствах."} Сохраняются последние 100 изменений.</p>
@@ -1708,6 +1704,10 @@ function NoteEditor({
             {view ? "Редактировать" : "Предпросмотр"}
           </span>
         </button>
+        <div className="writing-actions">
+          <button className="text-button" aria-pressed={focused} onClick={() => setFocused(v => !v)}>{focused ? "Вернуться" : "Сосредоточиться"}</button>
+          <button className="text-button" onClick={async () => { await saveRef.current(); if (failed.current) return; try { setHistory(await repository.history(note.user_id, note.id)); setVersion(null); setHistoryError(""); } catch { setHistoryError("Не удалось загрузить историю. Проверь соединение и попробуй снова."); } }}>История изменений</button>
+        </div>
       </div>
       {view ? (
         <div className="markdown note-body">
@@ -1727,12 +1727,10 @@ function NoteEditor({
         />
       )}
       <div className="editor-footer">
-        <span
-          role="status"
-          className={state === "Не удалось сохранить" ? "error" : "muted"}
-        >
-          {state === "Сохранено" && <Check size={14} />} {state}
-        </span>
+        <div className="save-feedback" data-state={state === "Не удалось сохранить" ? "error" : state === "Сохранено" ? "saved" : "saving"}>
+          <span role="status" aria-live="polite">
+            {state === "Сохранено" ? <Check size={14} /> : <span className="save-dot" aria-hidden="true" />} {state}
+          </span>
         {state === "Не удалось сохранить" && (
           <button
             className="text-button"
@@ -1741,6 +1739,7 @@ function NoteEditor({
             Повторить
           </button>
         )}
+        </div>
         <button
           className="secondary"
           onClick={async () => {
