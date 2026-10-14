@@ -118,6 +118,8 @@
 .journey-album.has-memory .journey-cover { order: 2; width: 120px; height: 132px; align-self: center; margin: 14px 14px 14px 0; border-radius: 10px; }
 .journey-album.has-memory { grid-template-columns: minmax(0, 1fr) 380px; gap: 28px; }
 .memory-panel { background: #171c2740; border: 1px solid #2a314580; padding: 24px; }
+.memory-panel form textarea { border-radius: 14px; border-color: #343c50; background: #111620; transition: border-color 180ms ease, box-shadow 180ms ease; color-scheme: dark; scrollbar-width: thin; scrollbar-color: #41495f transparent; }
+.memory-panel form textarea:focus, .memory-panel form textarea:focus-visible { outline: none; border-color: #8b86bd; box-shadow: 0 0 0 3px #a9a4f50e; }
 .memory-panel .dialog-head h2 { font-family: var(--diary-type); font-size: 23px; font-weight: 600; }
 .memory-cover { aspect-ratio: 16 / 10; overflow: hidden; border-radius: 12px; margin: 20px 0; }
 .memory-cover img { width: 100%; height: 100%; object-fit: cover; }
