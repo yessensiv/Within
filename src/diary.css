@@ -166,6 +166,24 @@ body { background: var(--bg); }
   .journey-album.has-memory .journey-cover { width: calc(100% - 28px); height: 120px; margin: 0 14px 14px; }
 }
 
+@media (max-width: 700px) {
+  main:has(.note-list.mobile-hidden) { padding: 12px 12px 100px; }
+  .app .editor-panel { position: relative; padding: 14px 16px 16px; border-radius: 16px; }
+  .editor-panel > .mobile-back { position: absolute; top: 14px; left: 12px; min-height: 44px; padding: 8px 4px; margin: 0; font-size: 12px; gap: 5px; }
+  .editor-panel .editor-meta { padding-left: 76px; min-height: 44px; font-size: 10px; gap: 6px; }
+  .editor-panel .editor-meta > span { line-height: 1.5; }
+  .editor-panel .note-title { margin: 12px 0 8px; padding: 4px 0; font-size: 23px; }
+  .editor-panel .tag-editor { gap: 6px; margin-bottom: 8px; }
+  .editor-panel .formatting { gap: 2px; row-gap: 6px; padding: 4px 0 10px; overflow: visible; }
+  .editor-panel .formatting > .preview-toggle { margin-left: auto; }
+  .editor-panel .formatting .writing-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; margin: 0; padding: 0; gap: 8px; border: 0; background: transparent; }
+  .editor-panel .writing-actions .text-button { justify-content: center; min-height: 44px; padding: 8px 6px; border: 1px solid #343c5060; background: #ffffff03; font-size: 11px; }
+  .app .editor-panel textarea.note-body { min-height: clamp(200px, 32svh, 280px); padding: 16px 0 28px; }
+  .keyboard-open .editor-panel .formatting .writing-actions { display: none; }
+  .keyboard-open .app .editor-panel textarea.note-body { min-height: max(160px, calc(var(--visible-height) - 220px)); }
+  .editor-panel .editor-footer > .secondary { width: 100%; margin: 0; min-height: 44px; font-size: 11px; background: #ffffff02; }
+}
+
 /* Shared field treatment; embedded editor and search inputs keep their own surface. */
 @media (max-width: 700px) {
   dialog[open] {
