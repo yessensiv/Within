@@ -42,6 +42,9 @@ import {
   User,
   RotateCcw,
   CircleAlert,
+  Maximize2,
+  Minimize2,
+  History,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -1681,8 +1684,8 @@ function NoteEditor({
           </span>
         </button>
         <div className="writing-actions">
-          <button className="text-button" aria-pressed={focused} onClick={() => setFocused(v => !v)}>{focused ? "Вернуться" : "Сосредоточиться"}</button>
-          <button className="text-button" onClick={async () => { await saveRef.current(); if (failed.current) return; try { setHistory(await repository.history(note.user_id, note.id)); setVersion(null); setHistoryError(""); } catch { setHistoryError("Не удалось загрузить историю. Проверь соединение и попробуй снова."); } }}>История изменений</button>
+          <button className="text-button" aria-pressed={focused} onClick={() => setFocused(v => !v)}>{focused ? <Minimize2 size={15} /> : <Maximize2 size={15} />}{focused ? "Вернуться" : "Сосредоточиться"}</button>
+          <button className="text-button" aria-label="История изменений" title="История изменений" onClick={async () => { await saveRef.current(); if (failed.current) return; try { setHistory(await repository.history(note.user_id, note.id)); setVersion(null); setHistoryError(""); } catch { setHistoryError("Не удалось загрузить историю. Проверь соединение и попробуй снова."); } }}><History size={15} />История</button>
         </div>
       </div>
       {view ? (

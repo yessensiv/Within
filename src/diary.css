@@ -3,8 +3,10 @@
 .editor-panel .editor-meta { min-height: 36px; font-size: 11px; }
 .editor-panel textarea.note-body { color-scheme: dark; scrollbar-width: thin; scrollbar-color: #41495f transparent; }
 .editor-panel .formatting { flex-wrap: wrap; row-gap: 4px; }
-.editor-panel .formatting .writing-actions { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 0 auto; padding: 0; }
-.editor-panel .writing-actions .text-button { margin: 0; min-height: 44px; padding: 8px 10px; font-size: 11px; color: var(--muted); }
+.editor-panel .formatting .writing-actions { display: flex; flex-wrap: wrap; gap: 2px; margin: 0 0 0 auto; padding: 3px; border: 1px solid #343c5060; border-radius: 11px; background: #11162055; }
+.editor-panel .writing-actions .text-button { margin: 0; min-height: 38px; padding: 8px 10px; font-size: 11px; color: #b5bbce; border-radius: 8px; gap: 7px; }
+.editor-panel .writing-actions .text-button svg { color: #9994ce; flex-shrink: 0; }
+.editor-panel .formatting > .preview-toggle { margin-left: 8px; }
 .editor-panel .writing-actions .text-button:hover, .editor-panel .writing-actions [aria-pressed="true"] { color: var(--accent); background: #a9a4f50d; }
 .note-list .note-item.selected { box-shadow: inset 2px 0 0 var(--accent); }
 .note-item.selected h3 { color: #f0eeff; }
@@ -19,7 +21,8 @@
 @media(max-width:700px) {
   main:has(.note-list.mobile-hidden) > .page-head { display: none; }
   .editor-panel .note-title { font-size: 22px; margin-bottom: 8px; }
-  .editor-panel .formatting .writing-actions { width: 100%; justify-content: flex-end; border-top: 1px solid #2a314540; }
+  .editor-panel .formatting .writing-actions { width: auto; margin-top: 4px; margin-left: auto; justify-content: flex-end; }
+  .editor-panel .writing-actions .text-button { min-height: 44px; }
   .keyboard-open .editor-panel .formatting .writing-actions { display: none; }
   .editor-panel .note-body { scroll-margin-top: 120px; }
   .save-feedback { width: 100%; }
