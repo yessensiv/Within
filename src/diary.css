@@ -13,6 +13,8 @@ body { background: var(--bg); }
 .editor-panel > .markdown.note-body { width: 100%; max-width: none; color-scheme: dark; scrollbar-width: thin; scrollbar-color: #41495f transparent; scrollbar-gutter: stable; padding-right: 12px; }
 .note-reading { max-width: 72ch; margin-inline: auto; overflow-wrap: anywhere; }
 .note-reading > :first-child { margin-top: 0; }
+.writing-focus .editor-panel > .markdown.note-body { overflow: visible; overscroll-behavior: auto; height: auto; max-height: none; flex: none; scrollbar-gutter: auto; }
+.writing-focus .editor-panel textarea.note-body { overscroll-behavior: auto; }
 .note-reading pre { max-width: 100%; overflow-x: auto; padding: 14px; border: 1px solid #343c5060; border-radius: 10px; background: #111620; scrollbar-width: thin; }
 .note-reading img, .note-reading table { max-width: 100%; }
 .editor-panel > .markdown.note-body::-webkit-scrollbar { width: 6px; }
