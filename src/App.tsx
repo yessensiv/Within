@@ -1455,7 +1455,7 @@ function NoteEditor({
     }
   });
   const [state, setState] = useState("Сохранено");
-  const [view, setView] = useState(false);
+  const [view, setView] = useState(true);
   const [focused, setFocused] = useState(false);
   const [history, setHistory] = useState<NoteVersion[] | null>(null);
   const [version, setVersion] = useState<NoteVersion | null>(null);
@@ -1664,6 +1664,7 @@ function NoteEditor({
       <input
         className="note-title"
         aria-label="Название записи"
+        readOnly={view}
         value={draft.title}
         onChange={(e) => change({ title: e.target.value })}
       />

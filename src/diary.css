@@ -193,6 +193,14 @@ body { background: var(--bg); }
 }
 
 /* Shared field treatment; embedded editor and search inputs keep their own surface. */
+@media (min-width: 701px) {
+  .app .editor-panel { padding: 20px 26px; }
+  .editor-panel .editor-meta { min-height: 32px; }
+  .app .editor-panel .note-title { min-height: 44px; margin: 2px 0 6px; padding: 4px 0; }
+  .editor-panel .tag-editor { margin: 0 0 8px; }
+  .editor-panel .formatting { padding: 2px 0 8px; }
+  .editor-panel > .markdown.note-body, .editor-panel textarea.note-body { padding-top: 16px; }
+}
 @media (max-width: 700px) {
   dialog[open] {
     position: fixed;
