@@ -1711,7 +1711,7 @@ function NoteEditor({
       </div>
       {view ? (
         <div className="markdown note-body">
-          <Markdown body={draft.body} />
+          <div className="note-reading"><Markdown body={draft.body} /></div>
         </div>
       ) : (
         <textarea

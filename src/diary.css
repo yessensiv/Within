@@ -10,6 +10,14 @@ body { background: var(--bg); }
 .editor-panel .note-title { margin: 4px 0 12px; padding: 8px 0; font-size: 28px; }
 .editor-panel .editor-meta { min-height: 36px; font-size: 11px; }
 .editor-panel textarea.note-body { color-scheme: dark; scrollbar-width: thin; scrollbar-color: #41495f transparent; }
+.editor-panel > .markdown.note-body { width: 100%; max-width: none; color-scheme: dark; scrollbar-width: thin; scrollbar-color: #41495f transparent; scrollbar-gutter: stable; padding-right: 12px; }
+.note-reading { max-width: 72ch; margin-inline: auto; overflow-wrap: anywhere; }
+.note-reading > :first-child { margin-top: 0; }
+.note-reading pre { max-width: 100%; overflow-x: auto; padding: 14px; border: 1px solid #343c5060; border-radius: 10px; background: #111620; scrollbar-width: thin; }
+.note-reading img, .note-reading table { max-width: 100%; }
+.editor-panel > .markdown.note-body::-webkit-scrollbar { width: 6px; }
+.editor-panel > .markdown.note-body::-webkit-scrollbar-track { background: transparent; }
+.editor-panel > .markdown.note-body::-webkit-scrollbar-thumb { background: #41495f; border-radius: 8px; }
 .editor-panel .formatting { flex-wrap: wrap; row-gap: 4px; }
 .editor-panel .formatting .writing-actions { display: flex; flex-wrap: wrap; gap: 2px; margin: 0 0 0 auto; padding: 3px; border: 1px solid #343c5060; border-radius: 11px; background: #11162055; }
 .editor-panel .writing-actions .text-button { margin: 0; min-height: 38px; padding: 8px 10px; font-size: 11px; color: #b5bbce; border-radius: 8px; gap: 7px; }
