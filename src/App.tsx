@@ -2502,6 +2502,7 @@ function Welcome({
 export function Root() {
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(!supabase);
+  const [startupError, setStartupError] = useState(false);
   const [recovery, setRecovery] = useState(() => {
     try {
       const flag = JSON.parse(
@@ -2520,6 +2521,8 @@ export function Root() {
   const nav = useNavigate();
   useEffect(() => {
     if (!supabase) return;
+    let active = true;
+    const timeout = window.setTimeout(() => { if (active) setStartupError(true); }, 15000);
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, next) => {
@@ -2541,14 +2544,20 @@ export function Root() {
       if (next) repository = new SupabaseRepository(next.user.id);
       setSession(next);
       setReady(true);
+      setStartupError(false);
+      window.clearTimeout(timeout);
     });
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (!active) return;
+      if (error) { setStartupError(true); return; }
       if (data.session)
         repository = new SupabaseRepository(data.session.user.id);
       setSession(data.session);
       setReady(true);
-    });
-    return () => subscription.unsubscribe();
+      setStartupError(false);
+      window.clearTimeout(timeout);
+    }).catch(() => { if (active) setStartupError(true); });
+    return () => { active = false; window.clearTimeout(timeout); subscription.unsubscribe(); };
   }, []);
   useEffect(() => {
     if (
@@ -2562,7 +2571,7 @@ export function Root() {
   }, [ready, session, location.pathname, nav]);
   if (location.pathname.startsWith("/u/")) return <main className="public-page"><p>Страница недоступна</p><NavLink to="/goals">Открыть Within</NavLink></main>;
   if (!ready)
-    return <div className="loading">Открываем твоё пространство…</div>;
+    return <div className="loading" role="status">{startupError ? <><p>Не удалось подключиться. Сервер временно недоступен или соединение прервалось.</p><button className="secondary" onClick={() => window.location.reload()}>Попробовать снова</button></> : "Открываем твоё пространство…"}</div>;
   if (!supabase) return <App />;
   if (location.pathname === "/reset-password")
     return <ResetPassword session={session} recovery={recovery} />;
